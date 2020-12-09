@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proporzioni ricette</title>
+</head>
+<body>
+    <input type="text" id="ingredient" placeholder="Ingrediente"> <input type="text" id="weight" placeholder="Peso in gr"> <button type="button" id="btnAdd">Aggiungi</button> <input type="text" id="insertedConversionFactor" placeholder="Fattore di conversione"> <button type="button" id="btnConvert">Converti</button> <br><br>
+    <table style="width:100%" id="table">
+      </table>
+    <script>
+        var ingredient = document.getElementById("ingredient");
+        var weight = document.getElementById("weight");
+        const btnAdd = document.getElementById("btnAdd");
+        var table = document.getElementById("table");
+        var insertedConversionFactor = document.getElementById("insertedConversionFactor");
+        const btnConvert = document.getElementById("btnConvert");
+        var recipe = {};
+        var dosis = "";
+        const tableHeader = "<tr><th>Dosi originali</th><th>Dosi convertite</th></tr>";
+
+        weight.addEventListener("keyup", function(event) {
+            // Number 13 is the "Enter" key on the keyboard
+            if (event.keyCode === 13) {
+                // Cancel the default action, if needed
+                event.preventDefault();
+                // Trigger the button element with a click
+                btnAdd.click();
+            }
+        });
+
+        ingredient.addEventListener("keyup", function(event) {
+            // Number 13 is the "Enter" key on the keyboard
+            if (event.keyCode === 13) {
+                // Cancel the default action, if needed
+                event.preventDefault();
+                // Trigger the button element with a click
+                btnAdd.click();
+            }
+        });
+
+        var conversionFactor = 1;
+
+        insertedConversionFactor.addEventListener("keyup", function(event) {
+            // Number 13 is the "Enter" key on the keyboard
+            if (event.keyCode === 13) {
+                // Cancel the default action, if needed
+                event.preventDefault();
+                // Trigger the button element with a click
+                btnConvert.click();
+            }
+        });
+
+        btnConvert.addEventListener("click", e => {
+                if (insertedConversionFactor.value) {
+                    conversionFactor = parseFloat(insertedConversionFactor.value);
+                }
+                table.innerHTML = tableHeader; 
+
+                Object.keys(recipe).forEach(ingredient => {
+                    var dosis = " q.b.";
+                    var dosisConverted = " q.b.";
+                    if (recipe[ingredient]) {
+                        dosis = " " + recipe[ingredient] + " gr";
+                        dosisConverted = " " + recipe[ingredient]*conversionFactor + " gr";
+                    };
+                    var newRow = "<tr><td>" + ingredient + dosis + "</td> <td>" + ingredient + dosisConverted + "</td></tr>";
+                    table.innerHTML =  table.innerHTML + newRow;
+                });
+            }
+        );
+
+        btnAdd.addEventListener("click", e => {
+            if (ingredient.value){
+                recipe[ingredient.value] = parseInt(weight.value);
+            
+                table.innerHTML = tableHeader; 
+
+                Object.keys(recipe).forEach(ingredient => {
+                    var dosis = " q.b.";
+                    var dosisConverted = " q.b.";
+                    if (recipe[ingredient]) {
+                        dosis = " " + recipe[ingredient] + " gr";
+                        dosisConverted = " " + recipe[ingredient]*conversionFactor + " gr";
+                    };
+                    var newRow = "<tr><td>" + ingredient + dosis + "</td> <td>" + ingredient + dosisConverted + "</td></tr>";
+                    table.innerHTML =  table.innerHTML + newRow;
+                });
+                
+                document.getElementById("ingredient").value = "";
+                document.getElementById("weight").value = "";
+            }
+        });
+        
+    </script>
+</body>
+</html>
